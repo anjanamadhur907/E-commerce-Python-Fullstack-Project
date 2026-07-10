@@ -1,1 +1,6 @@
 Generic single-database configuration.
+
+git status
+git add .
+git commit -m "Fixed login bug"
+git push

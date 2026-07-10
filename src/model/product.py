@@ -1,0 +1,19 @@
+from sqlalchemy import Integer, String, Numeric, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from src.db.dbConfig import Base
+
+
+class Product(Base):
+    __tablename__ = "product"
+    id:Mapped[int] = mapped_column(Integer, primary_key=True)
+    title:Mapped[str] = mapped_column(String(100))
+    price:Mapped[float] = mapped_column(Numeric(10,2))
+    description:Mapped[str] = mapped_column(String(100), nullable=True)
+    rating:Mapped[str] = mapped_column(String(50), nullable=True)
+    product_image:Mapped[str] = mapped_column(String(200))
+    category_id:Mapped[int] = mapped_column(ForeignKey("category.id"))
+
+    category:Mapped["Category"] = relationship("Category", back_populates="product", lazy="selectin")
+
+    cart_items:Mapped[list["CartItems"]] = relationship("CartItem", back_populates="product", lazy="selectin")
