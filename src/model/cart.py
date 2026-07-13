@@ -9,7 +9,7 @@ class Cart(Base):
     id:Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id:Mapped[int] = mapped_column(ForeignKey("user.id"), unique=True)
 
-    user:Mapped["User"] = relationship("Cart", back_populates="user", lazy="selectin")
+    user:Mapped["User"] = relationship("User", back_populates="cart", lazy="selectin")
 
-    cart_items:Mapped[list["CartItems"]] = relationship("CartItem", back_populates="cart",
+    cart_items:Mapped[list["CartItems"]] = relationship("CartItems", back_populates="cart",
                                                         cascade="all, delete-orphan")
