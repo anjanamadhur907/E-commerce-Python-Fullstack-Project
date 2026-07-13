@@ -13,4 +13,4 @@ class Category(Base):
     category_image:Mapped[str] = mapped_column(String(200))
 
     products:Mapped[list["Product"]] = relationship("Product",back_populates="category",
-                                                    lazy="selectin", cascade="all, delete-orphan")
+                                                   cascade="all, delete-orphan")

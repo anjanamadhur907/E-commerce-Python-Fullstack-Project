@@ -12,3 +12,6 @@ class UserRepository:
         await self.session.flush()
         await self.session.refresh(user)
         return user
+
+    async def fetch_by_id(self, id:int):
+        return await self.session.get(User, id)

@@ -9,6 +9,6 @@ class CartItems(Base):
     cart_id:Mapped[int] = mapped_column(ForeignKey("cart.id"),primary_key=True)
     product_id:Mapped[int] = mapped_column(ForeignKey("product.id"),primary_key=True)
 
-    cart:Mapped["Cart"] = relationship("Cart", lazy="selectin")
+    cart:Mapped["Cart"] = relationship("Cart")
 
-    product:Mapped["Product"] = relationship("Product", lazy="selectin")
+    product:Mapped["Product"] = relationship("Product")

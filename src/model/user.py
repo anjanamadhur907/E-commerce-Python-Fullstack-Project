@@ -12,4 +12,4 @@ class User(Base):
     password:Mapped[str] = mapped_column(String(100))
 
     cart:Mapped["Cart"] = relationship("Cart",cascade="all,delete-orphan",
-                                       back_populates="user", lazy="selectin",uselist=False)
+                                       back_populates="user", uselist=False)
