@@ -1,6 +1,7 @@
 from fastapi import UploadFile
 from pathlib import Path
 
+from src.exception.resource_not_found_exception import ResourceNotFoundException
 from src.model import Product
 from src.repository.product_repository import ProductRepository
 import shutil
@@ -19,3 +20,21 @@ class ProductService:
 
     async def fetch_all(self):
         return await self.product_repo.fetch_all()
+
+    async def delete_product(self, id:int):
+        product = await self.product_repo.fetch_by_id(id)
+        if not product:
+            raise ResourceNotFoundException(f"Product with id {id} was not found.")
+        return await self.product_repo.delete_product(product)
+
+    async def update_product(self,id:int,title:str,price:float,description:str,rating:str,product_image:UploadFile,category_id:int):
+        product = await self.product_repo.fetch_by_id(id)
+        if not id:
+            raise ResourceNotFoundException(f"Resource with id {id} was not found.")
+        product.title = title
+        product.price = price
+        product.description = description
+        product.rating = rating
+        product.product_image = "/public/images/"+product_image.filename
+        product.category_id = category_id
+        return product

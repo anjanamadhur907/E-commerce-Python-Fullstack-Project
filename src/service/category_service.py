@@ -1,5 +1,6 @@
 from fastapi import UploadFile
 
+from src.exception.resource_not_found_exception import ResourceNotFoundException
 from src.model import Category
 from src.repository.category_repository import CategoryRepository
 from pathlib import Path
@@ -20,3 +21,12 @@ class CategoryService:
         category = Category(category_name=category_name,
                             category_image="/public/images/"+category_image.filename)
         return await self.category_repo.create_category(category)
+
+    async def delete_category(self, id:int):
+        category = await self.category_repo.fetch_category_by_id(id)
+        if not category:
+            raise ResourceNotFoundException(f"Category with id {id} not found")
+        return await self.category_repo.delete_category(category)
+
+    async def fetch_all_category(self):
+        return await self.category_repo.fetch_all_category()

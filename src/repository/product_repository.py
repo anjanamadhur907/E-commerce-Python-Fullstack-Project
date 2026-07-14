@@ -22,3 +22,7 @@ class ProductRepository:
 
     async def fetch_by_id(self,id:int):
         return await self.session.get(Product, id)
+
+    async def delete_product(self, product:Product):
+        await self.session.delete(product)
+        await self.session.flush()
