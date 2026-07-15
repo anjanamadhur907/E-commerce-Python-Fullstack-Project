@@ -13,3 +13,5 @@ class User(Base):
 
     cart:Mapped["Cart"] = relationship("Cart",cascade="all,delete-orphan",
                                        back_populates="user", uselist=False)
+
+    orders:Mapped[list["Order"]] = relationship("Order", cascade="all,delete-orphan", back_populates="user")

@@ -18,3 +18,7 @@ class CartItemsRepository:
         stmt = select(CartItems).where(CartItems.product_id == product_id, CartItems.cart_id == cart_id)
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
+
+    async def delete_cart_items(self,cart_item:CartItems):
+        await self.session.delete(cart_item)
+        await self.session.flush()

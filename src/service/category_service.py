@@ -30,3 +30,11 @@ class CategoryService:
 
     async def fetch_all_category(self):
         return await self.category_repo.fetch_all_category()
+
+    async def update_category(self,id:int,category_name: str, category_image:UploadFile):
+        category = await self.category_repo.fetch_category_by_id(id)
+        if not category:
+            raise ResourceNotFoundException(f"Category with id {id} not found")
+        category.category_name = category_name
+        category.category_image = "/public/images/"+category_image.filename
+        return category

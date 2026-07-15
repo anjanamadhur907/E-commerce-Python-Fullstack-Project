@@ -12,3 +12,6 @@ router = APIRouter(prefix="/cart", tags=["cart"])
 async def add_to_cart(request:CartRequest, cart_service:CartService=Depends(get_cart_service)):
     return await cart_service.add_to_cart(request)
 
+@router.get("/{user_id}", status_code=200)
+async def fetch_cart_by_user_id(user_id:int, cart_service:CartService=Depends(get_cart_service)):
+    return await cart_service.fetch_cart_by_user_id(user_id)

@@ -1,5 +1,6 @@
 from src.exception.resource_not_found_exception import ResourceNotFoundException
 from src.model import CartItems,Cart
+from src.repository.cart_items_repository import CartItemsRepository
 from src.repository.cart_repository import CartRepository
 from src.repository.product_repository import ProductRepository
 from src.repository.user_repository import UserRepository
@@ -7,7 +8,7 @@ from src.schema.cart_schema import CartRequest
 
 
 class CartService:
-    def __init__(self, user_repo:UserRepository, product_repo:ProductRepository, cart_repo:CartRepository, cart_items_repo:CartRepository):
+    def __init__(self, user_repo:UserRepository, product_repo:ProductRepository, cart_repo:CartRepository, cart_items_repo:CartItemsRepository):
         self.user_repo = user_repo
         self.product_repo = product_repo
         self.cart_repo = cart_repo
@@ -37,3 +38,10 @@ class CartService:
             cart_items = CartItems(cart_id=cart.id, product_id=product_id)
             await self.cart_items_repo.save_product_in_cart(cart_items)
             return {"message": "Item successfully added to cart"}
+
+    async def fetch_cart_by_user_id(self, user_id:int):
+        cart = await self.cart_repo.fetch_cart_by_user_id(user_id)
+        for item in cart.cart_items:
+            print(item.product.title)
+            print(item.product.price)
+        return cart
