@@ -29,13 +29,14 @@ class CartService:
         if not cart:
             cart = Cart(user_id=user_id)
             cart = await self.cart_repo.create_cart(cart)
-            await self.cart_items_repo.save_product_in_cart(CartItems(product_id=product_id, cart_id=cart.id))
+            await self.cart_items_repo.save_product_in_cart(CartItems(product_id=product_id, cart_id=cart.id, quantity=request.quantity))
             return {"message":"Item successfully added to cart"}
         else:
             cart_items = await self.cart_items_repo.fetch_cart_items_by_product_id(product_id=product_id, cart_id=cart.id)
             if cart_items:
-                return {"message":"Item already added to cart"}
-            cart_items = CartItems(cart_id=cart.id, product_id=product_id)
+                cart_items.quantity += request.quantity
+                return {"message":"Quantity updated successfully"}
+            cart_items = CartItems(cart_id=cart.id, product_id=product_id,quantity=request.quantity)
             await self.cart_items_repo.save_product_in_cart(cart_items)
             return {"message": "Item successfully added to cart"}
 

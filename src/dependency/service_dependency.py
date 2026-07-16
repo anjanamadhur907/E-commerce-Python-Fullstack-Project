@@ -1,4 +1,8 @@
+from http.client import HTTPException
+
 from fastapi import Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from pip._internal.cli import status_codes
 
 from src.dependency.repository_dependency import get_user_repository, get_category_repository, get_product_repository, \
     get_cart_repository, get_cart_items_repository, get_order_repository, get_order_items_repository
@@ -14,6 +18,16 @@ from src.service.cart_service import CartService
 from src.service.category_service import CategoryService
 from src.service.product_service import ProductService
 from src.service.user_service import UserService
+from src.utils.jwt_util import verify_token
+
+security = HTTPBearer()
+
+def authentication(header:HTTPAuthorizationCredentials=Depends(security)):
+    token = header.credentials
+    if not token:
+        raise HTTPException(status_code=401, details="Invalid Credentials")
+    payload = verify_token(token)
+    return payload
 
 
 def get_user_service(user_repo: UserRepository=Depends(get_user_repository)):

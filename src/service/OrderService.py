@@ -37,9 +37,9 @@ class OrderService:
 
         for cart_item in cart.cart_items:
             product = cart_item.product
-            order_item = OrderItems(order_id=order.id,product_id=product.id,price=product.price)
+            order_item = OrderItems(order_id=order.id,product_id=product.id,price=product.price,quantity=cart_item.quantity)
             await self.order_items_repo.create_order_items(order_item)
-            total_price+=product.price
+            total_price+=product.price * cart_item.quantity
         order.total_price = total_price
 
         for cart_item in cart.cart_items:
