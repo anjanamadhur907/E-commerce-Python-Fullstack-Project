@@ -5,6 +5,7 @@ from src.repository.cart_repository import CartRepository
 from src.repository.order_items_repository import OrderItemsRepository
 from src.repository.order_repository import OrderRepository
 from src.repository.user_repository import UserRepository
+from src.schema.order_schema import OrderRequest
 
 
 class OrderService:
@@ -20,18 +21,18 @@ class OrderService:
         self.order_repo = order_repo
         self.order_items_repo = order_items_repo
 
-    async def checkout(self, user_id:int):
-        user = await self.user_repo.fetch_by_id(user_id)
+    async def checkout(self, request:OrderRequest):
+        user = await self.user_repo.fetch_by_id(request.user_id)
         if not user:
-            raise ResourceNotFoundException(f"Uer with id {user_id} was not found.")
-        cart  = await self.cart_repo.fetch_cart_by_user_id(user_id)
+            raise ResourceNotFoundException(f"Uer with id {request.user_id} was not found.")
+        cart  = await self.cart_repo.fetch_cart_by_user_id(request.user_id)
         if not cart:
-            raise ResourceNotFoundException(f"Cart with id {user_id} was not found.")
+            raise ResourceNotFoundException(f"Cart with id {request.user_id} was not found.")
         if not cart.cart_items:
             return {
                 "message":"Cart is empty"
             }
-        order = Order(user_id=user_id, total_price=0)
+        order = Order(user_id=request.user_id,receiver_name=request.receiver_name,receiver_mobile=request.receiver_mobile,delivery_address=request.delivery_address ,total_price=0)
         order = await self.order_repo.create_order(order)
         total_price = 0
 
