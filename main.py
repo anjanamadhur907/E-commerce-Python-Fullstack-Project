@@ -12,7 +12,19 @@ from src.exception.global_exception_handler import resource_not_found_exception_
     unknown_exception_handler
 from src.exception.resource_not_found_exception import ResourceNotFoundException
 
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
+origins = ["http://localhost:5173"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
+
 
 app.add_exception_handler(ResourceNotFoundException, resource_not_found_exception_handler)
 app.add_exception_handler(SQLAlchemyError, sqlalchemy_error_handler)

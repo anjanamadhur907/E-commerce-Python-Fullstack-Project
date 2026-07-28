@@ -46,3 +46,30 @@ class CartService:
             print(item.product.title)
             print(item.product.price)
         return cart
+
+    async def remove_product_from_cart(self, user_id:int,product_id:int):
+        user = await self.user_repo.fetch_by_id(user_id)
+
+        if not user:
+            raise ResourceNotFoundException(
+                f"User with id {user_id} not found"
+            )
+        cart = await self.cart_repo.fetch_cart_by_user_id(user_id)
+
+        if not cart:
+            raise ResourceNotFoundException(
+                "Cart not found"
+            )
+        cart_item = await self.cart_items_repo.fetch_cart_items_by_product_id(
+            product_id,
+            cart.id
+        )
+
+        if not cart_item:
+            raise ResourceNotFoundException(
+                "Product not found in cart"
+            )
+        await self.cart_items_repo.delete_cart_items(cart_item)
+        return {
+            "message": "Product removed from cart successfully"
+        }

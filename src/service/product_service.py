@@ -38,3 +38,9 @@ class ProductService:
         product.product_image = "/public/images/"+product_image.filename
         product.category_id = category_id
         return product
+
+    async def fetch_by_id(self,id:int):
+        user = await self.product_repo.fetch_by_id(id)
+        if not user:
+            raise ResourceNotFoundException(f"Resource with id {id} was not found.")
+        return user

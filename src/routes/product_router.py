@@ -20,7 +20,7 @@ async def create_product(payload:dict=Depends(authentication),
     return await product_service.create_product(title=title, price=price, description=description, rating=rating, product_image=product_image,category_id=category_id)
 
 @router.get("/", status_code=200)
-async def fetch_all(payload:dict=Depends(authentication),product_service:ProductService=Depends(get_product_service)):
+async def fetch_all(product_service:ProductService=Depends(get_product_service)):
     return await product_service.fetch_all()
 
 @router.delete("/{id}", status_code=200)
@@ -38,3 +38,7 @@ async def update_product(id:int,
                          payload:dict=Depends(authentication),
                          product_service:ProductService=Depends(get_product_service)):
     return await product_service.update_product(id,title,price,description,rating,product_image,category_id)
+
+@router.get("/{id}", status_code=200)
+async def fetch_by_id(id:int, product_service:ProductService=Depends(get_product_service)):
+    return await product_service.fetch_by_id(id)
